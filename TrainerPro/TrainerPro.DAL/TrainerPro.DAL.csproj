@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="TrainerProContext.DbSet.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="TrainerProContext.DbSet.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TrainerPro.Core\TrainerPro.Core.csproj" />
+  </ItemGroup>
+
+</Project>
