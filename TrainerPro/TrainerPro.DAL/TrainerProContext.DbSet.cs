@@ -1,7 +1,7 @@
 ﻿namespace TrainerPro.DAL
 {
-    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Core.Entities;
+    using Microsoft.EntityFrameworkCore;
 
     /// <summary>
     /// Partial class that contains only DbSets e.g
