@@ -3,13 +3,14 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
+    using System;
     using TrainerPro.Core.Entities;
     using TrainerPro.Core.Identities;
 
     /// <summary>
     /// Partial class that contains EF DbContext configuration
     /// </summary>
-    public partial class TrainerProContext : IdentityDbContext<ApplicationUser, IdentityRole<string>, string>
+    public partial class TrainerProContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
     {
         public TrainerProContext(DbContextOptions<TrainerProContext> options) : base(options) { }
 
