@@ -3,6 +3,7 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
+    using TrainerPro.Core.Entities;
     using TrainerPro.Core.Identities;
 
     /// <summary>
@@ -20,6 +21,10 @@
                 .HasOne(u => u.AccountType)
                 .WithMany(t => t.ApplicationUsers)
                 .HasForeignKey(u => u.AccountTypeId);
+
+            modelBuilder.Entity<AccountType>()
+                .HasData(new AccountType { Id = 1, Name = "Client", Description = "Klient" },
+                         new AccountType { Id = 2, Name = "Trainer", Description = "Trener" });
         }
     }
 }
