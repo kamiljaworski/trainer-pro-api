@@ -2,9 +2,13 @@ namespace TrainerPro.Api
 {
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using TrainerPro.Core.Identities;
+    using TrainerPro.DAL;
 
     public class Startup
     {
@@ -19,6 +23,9 @@ namespace TrainerPro.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddDbContext<TrainerProContext>(options => options.UseSqlServer(Configuration.GetConnectionString("TrainerPro")));
+            services.AddIdentity<ApplicationUser, IdentityRole<string>>().AddEntityFrameworkStores<TrainerProContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
