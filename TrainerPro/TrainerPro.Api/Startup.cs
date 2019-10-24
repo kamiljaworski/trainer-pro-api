@@ -1,6 +1,5 @@
 namespace TrainerPro.Api
 {
-    using Microsoft.OpenApi.Models;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -10,6 +9,7 @@ namespace TrainerPro.Api
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using Microsoft.IdentityModel.Tokens;
+    using Microsoft.OpenApi.Models;
     using System;
     using System.Text;
     using TrainerPro.Api.Helpers.Models;
@@ -58,7 +58,7 @@ namespace TrainerPro.Api
                     ValidateAudience = false
                 };
             });
-
+          
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
@@ -77,7 +77,6 @@ namespace TrainerPro.Api
                 });
 
             });
-
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
