@@ -9,6 +9,7 @@ namespace TrainerPro.Api
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using Microsoft.IdentityModel.Tokens;
+    using Microsoft.OpenApi.Models;
     using System;
     using System.Text;
     using TrainerPro.Api.Helpers.Models;
@@ -26,6 +27,7 @@ namespace TrainerPro.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddControllers();
 
             // Configure DbContext and Identity
@@ -56,6 +58,25 @@ namespace TrainerPro.Api
                     ValidateAudience = false
                 };
             });
+          
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "Trainer-Pro API",
+                    Description = "Test Trainer-Pro API with ASP.NET Core 3.0",
+                    Contact = new OpenApiContact
+                    {
+                        Email = "davejab97@gmail.com",
+                    },
+                    License = new OpenApiLicense
+                    {
+                        Name = "No license here :)",
+                    }
+                });
+
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -75,6 +96,12 @@ namespace TrainerPro.Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Trainer-Pro API V1");
             });
         }
     }
