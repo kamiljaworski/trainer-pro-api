@@ -6,6 +6,8 @@
 
     public class ApplicationUser : IdentityUser<Guid>
     {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public int AccountTypeId { get; set; }
         public AccountType AccountType { get; set; }
     }

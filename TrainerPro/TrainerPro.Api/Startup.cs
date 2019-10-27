@@ -17,6 +17,7 @@ namespace TrainerPro.Api
     using TrainerPro.Api.Helpers.Models;
     using TrainerPro.Core.Identities;
     using TrainerPro.DAL;
+    using TrainerPro.Services.Interfaces;
     using TrainerPro.Services.Services;
 
     public class Startup
@@ -32,20 +33,19 @@ namespace TrainerPro.Api
         {
 
             services.AddControllers();
+            services.AddRazorPages();
 
             // Configure DbContext and Identity
             services.AddDbContext<TrainerProContext>(options => options.UseSqlServer(Configuration.GetConnectionString("TrainerPro")));
             services.AddIdentity<ApplicationUser, IdentityRole<Guid>>().AddEntityFrameworkStores<TrainerProContext>();
 
-            // Configure strongly typed settings objects
+            // Configure JWT Settings and register it
             var jwtSettingsConfiguration = Configuration.GetSection("JwtSettings");
-            //services.AddOptions().Configure<JwtSettings>(jwtSettingsConfiguration);
-           // services.Configure<JwtSettings>(jwtSettingsConfiguration);
-
-            // Configure JWT Authentication
             var jwtSettings = jwtSettingsConfiguration.Get<JwtSettings>();
             var key = Encoding.ASCII.GetBytes(jwtSettings.SecretKey);
-            services.AddSingleton<JwtSettings>(jwtSettings);
+            services.AddSingleton(jwtSettings);
+
+            // Configure JWT Authentication
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
             services.AddAuthentication(options =>
             {
@@ -68,7 +68,8 @@ namespace TrainerPro.Api
                     ValidAudience = jwtSettings.Audience
                 };
             });
-          
+
+            // Configure Swagger
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
@@ -88,21 +89,11 @@ namespace TrainerPro.Api
 
             });
 
-            services.AddScoped<IEmailSender, EmailSender>(sp =>
-            {
-                return new EmailSender(
-                    host: "smtp.gmail.com",
-                    port: 587,
-                    enableSSL: true,
-                    userName: "etrainer.proo@gmail.com",
-                    password: "trainer-pro!@#$"
-                    //host: Configuration["EmailSender:Host"],
-                    //port: Configuration.GetValue<int>("EmailSender:Port"),
-                    //enableSSL: Configuration.GetValue<bool>("EmailSender:EnableSSL"),
-                    //userName: Configuration["EmailSender:UserName"],
-                    //password: Configuration["EmailSender:Password"]
-                    );
-            });
+            // Configure Services
+            var emailSettings = Configuration.GetSection("EmailSettings").Get<EmailSettings>();
+            services.AddScoped<IEmailSender, EmailSender>(sp => new EmailSender(emailSettings.Host, emailSettings.Port, emailSettings.EnableSSL, emailSettings.Username, emailSettings.Password));
+            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IViewRenderService, ViewRenderService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
