@@ -25,7 +25,6 @@ namespace TrainerPro.Services.Services
             _userName = userName;
             _password = password;
         }
-
         public async Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
             var client = new SmtpClient(_host, _port)
