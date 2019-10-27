@@ -10,6 +10,7 @@ namespace TrainerPro.Api
     using Microsoft.Extensions.Hosting;
     using Microsoft.IdentityModel.Tokens;
     using System;
+    using System.IdentityModel.Tokens.Jwt;
     using System.Text;
     using TrainerPro.Api.Helpers.Models;
     using TrainerPro.Core.Identities;
@@ -33,27 +34,34 @@ namespace TrainerPro.Api
             services.AddIdentity<ApplicationUser, IdentityRole<Guid>>().AddEntityFrameworkStores<TrainerProContext>();
 
             // Configure strongly typed settings objects
-            var appSettingsSection = Configuration.GetSection("AppSettings");
-            services.Configure<AppSettings>(appSettingsSection);
+            var jwtSettingsConfiguration = Configuration.GetSection("JwtSettings");
+            //services.AddOptions().Configure<JwtSettings>(jwtSettingsConfiguration);
+           // services.Configure<JwtSettings>(jwtSettingsConfiguration);
 
             // Configure JWT Authentication
-            var appSettings = appSettingsSection.Get<AppSettings>();
-            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
-            services.AddAuthentication(x =>
+            var jwtSettings = jwtSettingsConfiguration.Get<JwtSettings>();
+            var key = Encoding.ASCII.GetBytes(jwtSettings.SecretKey);
+            services.AddSingleton<JwtSettings>(jwtSettings);
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            services.AddAuthentication(options =>
             {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-            .AddJwtBearer(x =>
+            .AddJwtBearer(options =>
             {
-                x.RequireHttpsMetadata = false;
-                x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
+                    ClockSkew = TimeSpan.Zero,
+                    ValidIssuer = jwtSettings.Issuer,
+                    ValidAudience = jwtSettings.Audience
                 };
             });
         }
