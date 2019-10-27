@@ -52,6 +52,8 @@
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, model.Email),
                 new Claim("username", model.Username),
+                new Claim("firstName", model.FirstName),
+                new Claim("lastName", model.LastName),
                 new Claim("account_type", model.AccountType),
                 new Claim("account_type_id", model.AccountTypeId.ToString())
             };

@@ -52,6 +52,8 @@ namespace TrainerPro.Services.Services
             return new TokenModel
             {
                 Username = user.UserName,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
                 Email = user.Email,
                 AccountType = (await _dbContext.AccountTypes.SingleAsync(at => at.Id == user.AccountTypeId)).Name,
                 AccountTypeId = user.AccountTypeId
