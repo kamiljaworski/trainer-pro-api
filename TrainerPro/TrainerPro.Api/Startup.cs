@@ -4,6 +4,7 @@ namespace TrainerPro.Api
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Identity.UI.Services;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +16,7 @@ namespace TrainerPro.Api
     using TrainerPro.Api.Helpers.Models;
     using TrainerPro.Core.Identities;
     using TrainerPro.DAL;
+    using TrainerPro.Services.Services;
 
     public class Startup
     {
@@ -76,6 +78,22 @@ namespace TrainerPro.Api
                     }
                 });
 
+            });
+
+            services.AddScoped<IEmailSender, EmailSender>(sp =>
+            {
+                return new EmailSender(
+                    host: "smtp.gmail.com",
+                    port: 587,
+                    enableSSL: true,
+                    userName: "etrainer.proo@gmail.com",
+                    password: "trainer-pro!@#$"
+                    //host: Configuration["EmailSender:Host"],
+                    //port: Configuration.GetValue<int>("EmailSender:Port"),
+                    //enableSSL: Configuration.GetValue<bool>("EmailSender:EnableSSL"),
+                    //userName: Configuration["EmailSender:UserName"],
+                    //password: Configuration["EmailSender:Password"]
+                    );
             });
         }
 
