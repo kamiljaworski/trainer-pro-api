@@ -9,6 +9,5 @@
     {
         Task RegisterAsync(RegisterDTO model);
         Task<TokenModel> LoginAsync(LoginDTO model);
-        Task<ApplicationUser> GetTrainers();
     }
 }

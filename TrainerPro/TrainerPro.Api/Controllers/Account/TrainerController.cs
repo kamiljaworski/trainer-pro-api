@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TrainerPro.Api.Helpers.Models;
+using TrainerPro.Core.DTOs;
 using TrainerPro.Core.Identities;
 using TrainerPro.Services.Interfaces;
 
@@ -15,21 +16,17 @@ namespace TrainerPro.Api.Controllers.Account
     [ApiController]
     public class TrainerController : ControllerBase
     {
-        private readonly ITrainerService trainerService;
-        private readonly JwtSettings _jwtSettings;
+        private readonly ITrainerService _trainerService;
 
-        public TrainerController(ITrainerService trainerService, JwtSettings jwtSettings)
+        public TrainerController(ITrainerService trainerService)
         {
-            _accountService = accountService;
-            _jwtSettings = jwtSettings;
+            _trainerService = trainerService;
         }
 
         [HttpGet]
-        public async Task<ApplicationUser> GetTrainers()
+        public async Task<IEnumerable<TrainerDTO>> GetTrainers()
         {
-            var trainers = await _accountService.GetTrainers();
-            return trainers;
+            return await _trainerService.GetTrainers();
         }
-
     }
 }

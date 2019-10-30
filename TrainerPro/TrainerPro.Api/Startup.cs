@@ -94,6 +94,7 @@ namespace TrainerPro.Api
             services.AddScoped<IEmailSender, EmailSender>(sp => new EmailSender(emailSettings.Host, emailSettings.Port, emailSettings.EnableSSL, emailSettings.Username, emailSettings.Password));
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IViewRenderService, ViewRenderService>();
+            services.AddScoped<ITrainerService, TrainerService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
