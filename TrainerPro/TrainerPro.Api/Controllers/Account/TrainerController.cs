@@ -11,7 +11,7 @@ using TrainerPro.Services.Interfaces;
 
 namespace TrainerPro.Api.Controllers.Account
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class TrainerController : ControllerBase
@@ -26,7 +26,13 @@ namespace TrainerPro.Api.Controllers.Account
         [HttpGet]
         public async Task<IEnumerable<TrainerDTO>> GetTrainers()
         {
-            return await _trainerService.GetTrainers();
+            return await _trainerService.GetTrainersAsync();
+        }
+
+        [HttpGet("{id}")]
+        public async Task<TrainerDTO> GetTrainerByIdAsync(string id)
+        {
+            return await _trainerService.GetTrainerByIdAsync(id);
         }
     }
 }

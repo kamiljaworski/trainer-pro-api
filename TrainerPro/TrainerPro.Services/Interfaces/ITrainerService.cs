@@ -8,6 +8,7 @@ namespace TrainerPro.Services.Interfaces
 {
     public interface ITrainerService
     {
-        Task<IEnumerable<TrainerDTO>> GetTrainers();
+        Task<IEnumerable<TrainerDTO>> GetTrainersAsync();
+        Task<TrainerDTO> GetTrainerByIdAsync(string id);
     }
 }
