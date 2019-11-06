@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ using TrainerPro.Services.Interfaces;
 
 namespace TrainerPro.Api.Controllers.Diet
 {
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ProductController : ControllerBase
@@ -23,16 +25,14 @@ namespace TrainerPro.Api.Controllers.Diet
         public async Task<ActionResult> GetAsync()
         {
             var products = await _productService.GetProductsAsync();
-            if (products == null || products.Count() == 0)
-                return new ObjectResult("There are no products") { StatusCode = 400 };
 
             return Ok(products);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetByIdAsync(string id)
+        public async Task<ActionResult> GetByIdAsync(int id)
         {
-            var product = await _productService.GetProductByNameAsync(id);
+            var product = await _productService.GetProductByIdAsync(id);
 
             if(product == null)
                 return new ObjectResult("This product does not exist") { StatusCode = 400 };
@@ -54,6 +54,22 @@ namespace TrainerPro.Api.Controllers.Diet
                 return Ok(new { message = e.Message });
             }
             return Ok();
+        }
+
+        [HttpPut]
+        public async Task<ActionResult> PutProductAsync([FromBody] AddProductDTO model)
+        {
+            var product = await _productService.UpdateProductAsync(model);
+
+            return Ok(product);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteProductByIdAsync(int id)
+        {
+            await _productService.DeleteProductByIdAsync(id);
+
+            return new ObjectResult("Product has been deleted.");
         }
     }
 }

@@ -26,11 +26,7 @@ namespace TrainerPro.Api.Controllers.Account
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TrainerDTO>>> GetTrainers()
         {
-            //return await _trainerService.GetTrainersAsync();
             var trainers = await _trainerService.GetTrainersAsync();
-
-            if (trainers == null || trainers.Count() == 0)
-                return new ObjectResult("There are no users with AccoutType 2") { StatusCode = 400 };
 
             return Ok(trainers);
         }
