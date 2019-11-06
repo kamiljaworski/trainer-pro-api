@@ -38,7 +38,7 @@ namespace TrainerPro.Services.Services
             }, model.Password);
 
             if (!result.Succeeded)
-                throw new InvalidOperationException("This user is already existing");
+                throw new InvalidOperationException(string.Join(";", result.Errors.Select(x => x.Description)));
         }
 
         public async Task<TokenModel> LoginAsync(LoginDTO model)

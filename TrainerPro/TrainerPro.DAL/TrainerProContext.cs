@@ -26,6 +26,19 @@
             modelBuilder.Entity<AccountType>()
                 .HasData(new AccountType { Id = 1, Name = "Client", Description = "Klient" },
                          new AccountType { Id = 2, Name = "Trainer", Description = "Trener" });
+
+            modelBuilder.Entity<MealProduct>()
+                .HasKey(mp => new { mp.ProductId, mp.MealId });
+
+            modelBuilder.Entity<MealProduct>()
+                .HasOne(mp => mp.Product)
+                .WithMany(p => p.MealProducts)
+                .HasForeignKey(mp => mp.ProductId);
+
+            modelBuilder.Entity<MealProduct>()
+                .HasOne(mp => mp.Meal)
+                .WithMany(m => m.MealProducts)
+                .HasForeignKey(mp => mp.MealId);
         }
     }
 }

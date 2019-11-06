@@ -34,9 +34,6 @@ namespace TrainerPro.Services.Services
                     Email = x.Email,
                 }).ToListAsync();
 
-            if (trainers == null)
-                throw new InvalidOperationException("There are no users with AccountType 2");
-
             return trainers;
         }
 

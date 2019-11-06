@@ -11,7 +11,7 @@ using TrainerPro.Services.Interfaces;
 
 namespace TrainerPro.Api.Controllers.Account
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class TrainerController : ControllerBase
@@ -24,15 +24,26 @@ namespace TrainerPro.Api.Controllers.Account
         }
 
         [HttpGet]
-        public async Task<IEnumerable<TrainerDTO>> GetTrainers()
+        public async Task<ActionResult<IEnumerable<TrainerDTO>>> GetTrainers()
         {
-            return await _trainerService.GetTrainersAsync();
+            //return await _trainerService.GetTrainersAsync();
+            var trainers = await _trainerService.GetTrainersAsync();
+
+            if (trainers == null || trainers.Count() == 0)
+                return new ObjectResult("There are no users with AccoutType 2") { StatusCode = 400 };
+
+            return Ok(trainers);
         }
 
         [HttpGet("{id}")]
-        public async Task<TrainerDTO> GetTrainerByIdAsync(string id)
+        public async Task<ActionResult<TrainerDTO>> GetTrainerByIdAsync(string id)
         {
-            return await _trainerService.GetTrainerByIdAsync(id);
+            var trainer = await _trainerService.GetTrainerByIdAsync(id);
+
+            if (trainer == null)
+                return new ObjectResult("This user does not exist") { StatusCode = 400 };
+
+            return Ok(trainer);
         }
     }
 }

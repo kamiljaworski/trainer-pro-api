@@ -95,6 +95,7 @@ namespace TrainerPro.Api
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IViewRenderService, ViewRenderService>();
             services.AddScoped<ITrainerService, TrainerService>();
+            services.AddScoped<IProductService, ProductService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -114,6 +115,13 @@ namespace TrainerPro.Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+
+            app.UseCors(x =>
+            {
+                x.AllowAnyOrigin();
+                x.AllowAnyHeader();
+                x.AllowAnyMethod();
             });
 
             app.UseSwagger();
