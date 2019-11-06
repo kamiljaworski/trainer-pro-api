@@ -9,7 +9,9 @@ namespace TrainerPro.Services.Interfaces
     public interface IProductService
     {
         Task<AddProductDTO> AddProductAsync(AddProductDTO model);
-        Task<IEnumerable<AddProductDTO>> GetProductsAsync();
-        Task<AddProductDTO> GetProductByNameAsync(string name);
+        Task<IEnumerable<GetProductDTO>> GetProductsAsync();
+        Task<AddProductDTO> GetProductByIdAsync(int id);
+        Task<AddProductDTO> UpdateProductAsync(AddProductDTO model);
+        Task DeleteProductByIdAsync(int id);
     }
 }

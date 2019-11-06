@@ -40,11 +40,12 @@ namespace TrainerPro.Services.Services
             return GetProductDTOFromProductEntity(newProduct);
         }
 
-        public async Task<IEnumerable<AddProductDTO>> GetProductsAsync()
+        public async Task<IEnumerable<GetProductDTO>> GetProductsAsync()
         {
             var trainers = await _dbContext.Products
-                .Select(p => new AddProductDTO
+                .Select(p => new GetProductDTO
                 {
+                    Id = p.ProductId,
                     Name = p.Name,
                     CarbsPer100g = p.CarbsPer100g,
                     FatPer100g = p.FatPer100g,
@@ -53,6 +54,40 @@ namespace TrainerPro.Services.Services
                 }).ToListAsync();
 
             return trainers;
+        }
+
+        public async Task<AddProductDTO> GetProductByIdAsync(int id)
+        {
+            var product = await _dbContext.Products.SingleOrDefaultAsync(p => p.ProductId == id);
+
+            if (product == null)
+                throw new InvalidOperationException("This product doesn't exist.");
+
+            return GetProductDTOFromProductEntity(product);
+        }
+
+        public async Task<AddProductDTO> UpdateProductAsync(AddProductDTO model)
+        {
+            var product = await _dbContext.Products.SingleOrDefaultAsync(c => c.Name == model.Name);
+
+            if (product == null)
+                throw new InvalidOperationException("This product doesn't exist.");
+
+            product.Name = model.Name;
+            await _dbContext.SaveChangesAsync();
+
+            return GetProductDTOFromProductEntity(product);
+        }
+
+        public async Task DeleteProductByIdAsync(int id)
+        {
+            var product = await _dbContext.Products.SingleOrDefaultAsync(c => c.ProductId == id);
+
+            if (product == null)
+                throw new InvalidOperationException("This product doesn't exist.");
+
+            _dbContext.Products.Remove(product);
+            await _dbContext.SaveChangesAsync();
         }
 
         private AddProductDTO GetProductDTOFromProductEntity(Product product)
@@ -65,16 +100,6 @@ namespace TrainerPro.Services.Services
                 ProteinPer100g = product.ProteinPer100g,
                 KcalPer100g = product.KcalPer100g
             };
-        }
-
-        public async Task<AddProductDTO> GetProductByNameAsync(string name)
-        {
-            var product = await _dbContext.Products.SingleOrDefaultAsync(p => p.Name == p.Name);
-
-            if (product == null)
-                throw new InvalidOperationException("This product doesn't exist.");
-
-            return GetProductDTOFromProductEntity(product);
         }
     }
 }
