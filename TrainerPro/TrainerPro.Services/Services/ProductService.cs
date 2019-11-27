@@ -26,23 +26,29 @@ namespace TrainerPro.Services.Services
             if (productExists)
                 throw new InvalidOperationException("This product already exist.");
 
-            var newProduct = new Product { 
-                Name = model.Name,
-                CarbsPer100g = model.CarbsPer100g,
-                FatPer100g = model.FatPer100g,
-                ProteinPer100g = model.ProteinPer100g,
-                KcalPer100g = model.KcalPer100g
-            };
+            if(isGramCorrect(model.CarbsPer100g, model.FatPer100g, model.ProteinPer100g))
+            {
+                var newProduct = new Product
+                {
+                    Name = model.Name,
+                    CarbsPer100g = model.CarbsPer100g,
+                    FatPer100g = model.FatPer100g,
+                    ProteinPer100g = model.ProteinPer100g,
+                    KcalPer100g = totalKcal(model.CarbsPer100g, model.FatPer100g, model.ProteinPer100g)
+                };
 
-            _dbContext.Products.Add(newProduct);
-            await _dbContext.SaveChangesAsync();
+                _dbContext.Products.Add(newProduct);
+                await _dbContext.SaveChangesAsync();
 
-            return GetProductDTOFromProductEntity(newProduct);
+                return GetProductDTOFromProductEntity(newProduct);
+            }
+
+            throw new InvalidOperationException("Total amount of macros not equals 100");
         }
 
         public async Task<IEnumerable<GetProductDTO>> GetProductsAsync()
         {
-            var trainers = await _dbContext.Products
+            var products = await _dbContext.Products
                 .Select(p => new GetProductDTO
                 {
                     Id = p.ProductId,
@@ -53,7 +59,7 @@ namespace TrainerPro.Services.Services
                     KcalPer100g = p.KcalPer100g
                 }).ToListAsync();
 
-            return trainers;
+            return products;
         }
 
         public async Task<AddProductDTO> GetProductByIdAsync(int id)
@@ -73,10 +79,20 @@ namespace TrainerPro.Services.Services
             if (product == null)
                 throw new InvalidOperationException("This product doesn't exist.");
 
-            product.Name = model.Name;
-            await _dbContext.SaveChangesAsync();
+            if(isGramCorrect(model.CarbsPer100g, model.FatPer100g, model.ProteinPer100g))
+            {
+                product.Name = model.Name;
+                product.CarbsPer100g = model.CarbsPer100g;
+                product.FatPer100g = model.FatPer100g;
+                product.ProteinPer100g = model.ProteinPer100g;
+                product.KcalPer100g = totalKcal(model.CarbsPer100g, model.FatPer100g, model.ProteinPer100g);
 
-            return GetProductDTOFromProductEntity(product);
+                await _dbContext.SaveChangesAsync();
+
+                return GetProductDTOFromProductEntity(product);
+            }
+
+            throw new InvalidOperationException("Total amount of macros not equals 100");
         }
 
         public async Task DeleteProductByIdAsync(int id)
@@ -100,6 +116,21 @@ namespace TrainerPro.Services.Services
                 ProteinPer100g = product.ProteinPer100g,
                 KcalPer100g = product.KcalPer100g
             };
+        }
+
+        public bool isGramCorrect(double carbs, double fat, double protein)
+        {
+            if(carbs + fat + protein == 100)
+            return true;
+
+            return false;
+        }
+
+        public double totalKcal(double carbs, double fat, double protein)
+        {
+            var totalKcal = (carbs * 4) + (fat + 9) + (protein * 4);
+
+            return totalKcal;
         }
     }
 }
