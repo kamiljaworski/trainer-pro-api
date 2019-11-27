@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TrainerPro.Core.Identities;
 
 namespace TrainerPro.Core.Entities
 {
     public class TrainingPlan
     {
         //ID | UserID | Date
-        public int TraininfPlanId { get; set; }
-        public int UserId { get; set; }
-        public Asp Product { get; set; }
+        public int TrainingPlanId { get; set; }
+        public ApplicationUser User { get; set; }
         public DateTime Date { get; set; }
         public ICollection<TrainingPlanExercise> TrainingPlanExercises { get; set; }
     }

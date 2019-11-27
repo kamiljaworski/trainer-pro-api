@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TrainerPro.DAL;
 
 namespace TrainerPro.DAL.Migrations
 {
     [DbContext(typeof(TrainerProContext))]
-    partial class TrainerProContextModelSnapshot : ModelSnapshot
+    [Migration("20191127155040_UserTrainingPlanMigration")]
+    partial class UserTrainingPlanMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -271,12 +273,15 @@ namespace TrainerPro.DAL.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("UserId")
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("UserId1")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("TrainingPlanId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId1");
 
                     b.ToTable("TrainingPlan");
                 });
@@ -470,7 +475,7 @@ namespace TrainerPro.DAL.Migrations
                 {
                     b.HasOne("TrainerPro.Core.Identities.ApplicationUser", "User")
                         .WithMany("TrainingPlans")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId1");
                 });
 
             modelBuilder.Entity("TrainerPro.Core.Entities.TrainingPlanExercise", b =>

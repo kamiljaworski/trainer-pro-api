@@ -40,6 +40,9 @@
                 .WithMany(m => m.MealProducts)
                 .HasForeignKey(mp => mp.MealId);
 
+            modelBuilder.Entity<ApplicationUser>()
+                .HasMany(tp => tp.TrainingPlans)
+                .WithOne(u => u.User);
 
             modelBuilder.Entity<TrainingPlanExercise>()
                 .HasKey(tpe => new { tpe.ExerciseId, tpe.TrainingPlanId });
@@ -53,7 +56,6 @@
                 .HasOne(tpe => tpe.TrainingPlan)
                 .WithMany(tp => tp.TrainingPlanExercises)
                 .HasForeignKey(tpe => tpe.TrainingPlanId);
-
         }
     }
 }
