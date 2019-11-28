@@ -34,6 +34,7 @@ namespace TrainerPro.Api
 
             services.AddControllers();
             services.AddRazorPages();
+            services.AddCors();
 
             // Configure DbContext and Identity
             services.AddDbContext<TrainerProContext>(options => options.UseSqlServer(Configuration.GetConnectionString("TrainerPro")));
@@ -68,7 +69,6 @@ namespace TrainerPro.Api
                     ValidAudience = jwtSettings.Audience
                 };
             });
-
             // Configure Swagger
             services.AddSwaggerGen(c =>
             {
@@ -105,7 +105,12 @@ namespace TrainerPro.Api
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseCors(x =>
+            {
+                x.AllowAnyOrigin();
+                x.AllowAnyHeader();
+                x.AllowAnyMethod();
+            });
             app.UseHttpsRedirection();
 
             app.UseRouting();
@@ -118,12 +123,7 @@ namespace TrainerPro.Api
                 endpoints.MapControllers();
             });
 
-            app.UseCors(x =>
-            {
-                x.AllowAnyOrigin();
-                x.AllowAnyHeader();
-                x.AllowAnyMethod();
-            });
+
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>
