@@ -97,6 +97,7 @@ namespace TrainerPro.Api
             services.AddScoped<ITrainerService, TrainerService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IMealService, MealService>();
+            services.AddScoped<IExerciseService, ExerciseService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

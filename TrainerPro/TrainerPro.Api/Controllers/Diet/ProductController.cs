@@ -22,7 +22,7 @@ namespace TrainerPro.Api.Controllers.Diet
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetAsync()
+        public async Task<ActionResult<GetProductDTO>> GetAsync()
         {
             var products = await _productService.GetProductsAsync();
 
@@ -30,7 +30,7 @@ namespace TrainerPro.Api.Controllers.Diet
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetByIdAsync(int id)
+        public async Task<ActionResult<GetProductDTO>> GetByIdAsync(int id)
         {
             var product = await _productService.GetProductByIdAsync(id);
 
@@ -57,7 +57,7 @@ namespace TrainerPro.Api.Controllers.Diet
         }
 
         [HttpPut]
-        public async Task<ActionResult> PutProductAsync([FromBody] AddProductDTO model)
+        public async Task<ActionResult<AddProductDTO>> PutProductAsync([FromBody] AddProductDTO model)
         {
             var product = await _productService.UpdateProductAsync(model);
 

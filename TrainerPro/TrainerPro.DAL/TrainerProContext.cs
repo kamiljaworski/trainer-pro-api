@@ -56,6 +56,9 @@
                 .HasOne(tpe => tpe.TrainingPlan)
                 .WithMany(tp => tp.TrainingPlanExercises)
                 .HasForeignKey(tpe => tpe.TrainingPlanId);
+
+            modelBuilder.Entity<Exercise>()
+                .ToTable("Exercises");
         }
     }
 }
