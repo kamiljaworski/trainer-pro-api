@@ -271,12 +271,12 @@ namespace TrainerPro.DAL.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("UserId")
+                    b.Property<Guid?>("UserIdId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("TrainingPlanId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserIdId");
 
                     b.ToTable("TrainingPlans");
                 });
@@ -468,9 +468,9 @@ namespace TrainerPro.DAL.Migrations
 
             modelBuilder.Entity("TrainerPro.Core.Entities.TrainingPlan", b =>
                 {
-                    b.HasOne("TrainerPro.Core.Identities.ApplicationUser", "User")
+                    b.HasOne("TrainerPro.Core.Identities.ApplicationUser", "UserId")
                         .WithMany("TrainingPlans")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserIdId");
                 });
 
             modelBuilder.Entity("TrainerPro.Core.Entities.TrainingPlanExercise", b =>

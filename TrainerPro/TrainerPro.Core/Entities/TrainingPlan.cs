@@ -9,7 +9,7 @@ namespace TrainerPro.Core.Entities
     {
         //ID | UserID | Date
         public int TrainingPlanId { get; set; }
-        public ApplicationUser User { get; set; }
+        public ApplicationUser UserId { get; set; }
         public DateTime Date { get; set; }
         public ICollection<TrainingPlanExercise> TrainingPlanExercises { get; set; }
     }

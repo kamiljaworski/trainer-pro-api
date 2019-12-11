@@ -42,7 +42,7 @@
 
             modelBuilder.Entity<ApplicationUser>()
                 .HasMany(tp => tp.TrainingPlans)
-                .WithOne(u => u.User);
+                .WithOne(u => u.UserId);
 
             modelBuilder.Entity<TrainingPlanExercise>()
                 .HasKey(tpe => new { tpe.ExerciseId, tpe.TrainingPlanId });
@@ -57,8 +57,8 @@
                 .WithMany(tp => tp.TrainingPlanExercises)
                 .HasForeignKey(tpe => tpe.TrainingPlanId);
 
-            modelBuilder.Entity<Exercise>()
-                .ToTable("Exercises");
+            //modelBuilder.Entity<Exercise>()
+            //    .ToTable("Exercises");
         }
     }
 }
