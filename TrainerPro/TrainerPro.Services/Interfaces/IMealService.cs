@@ -8,7 +8,7 @@ namespace TrainerPro.Services.Interfaces
 {
     public interface IMealService
     {
-        Task<AddMealDTO> AddMealAsync(AddMealDTO model);
-        Task DeleteMealByIdAsync(int id);
+        Task AddOrUpdateMealAsync(AddOrUpdateMealDTO model);
+        Task<IEnumerable<MealDTO>> GetMealsAsync();
     }
 }
