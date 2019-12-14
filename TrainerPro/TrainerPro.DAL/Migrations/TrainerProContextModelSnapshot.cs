@@ -192,7 +192,7 @@ namespace TrainerPro.DAL.Migrations
 
                     b.HasKey("ExerciseId");
 
-                    b.ToTable("Exercise");
+                    b.ToTable("Exercises");
                 });
 
             modelBuilder.Entity("TrainerPro.Core.Entities.Meal", b =>
@@ -271,14 +271,14 @@ namespace TrainerPro.DAL.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("UserId")
+                    b.Property<Guid?>("UserIdId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("TrainingPlanId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserIdId");
 
-                    b.ToTable("TrainingPlan");
+                    b.ToTable("TrainingPlans");
                 });
 
             modelBuilder.Entity("TrainerPro.Core.Entities.TrainingPlanExercise", b =>
@@ -320,7 +320,7 @@ namespace TrainerPro.DAL.Migrations
 
                     b.HasIndex("TrainingPlanId");
 
-                    b.ToTable("TrainingPlanExercise");
+                    b.ToTable("TrainingPlanExercises");
                 });
 
             modelBuilder.Entity("TrainerPro.Core.Identities.ApplicationUser", b =>
@@ -468,9 +468,9 @@ namespace TrainerPro.DAL.Migrations
 
             modelBuilder.Entity("TrainerPro.Core.Entities.TrainingPlan", b =>
                 {
-                    b.HasOne("TrainerPro.Core.Identities.ApplicationUser", "User")
+                    b.HasOne("TrainerPro.Core.Identities.ApplicationUser", "UserId")
                         .WithMany("TrainingPlans")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserIdId");
                 });
 
             modelBuilder.Entity("TrainerPro.Core.Entities.TrainingPlanExercise", b =>

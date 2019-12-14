@@ -128,7 +128,7 @@ namespace TrainerPro.Services.Services
 
         public double totalKcal(double carbs, double fat, double protein)
         {
-            var totalKcal = (carbs * 4) + (fat + 9) + (protein * 4);
+            var totalKcal = (carbs * 4) + (fat * 9) + (protein * 4);
 
             return totalKcal;
         }

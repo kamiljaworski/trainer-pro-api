@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TrainerPro.DAL.Migrations
 {
-    public partial class Initial : Migration
+    public partial class ExerciseMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -22,6 +22,7 @@ namespace TrainerPro.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+
                 name: "AspNetRoles",
                 columns: table => new
                 {
@@ -33,6 +34,50 @@ namespace TrainerPro.DAL.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetRoles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Exercises",
+                columns: table => new
+                {
+                    ExerciseId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Exercises", x => x.ExerciseId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Meals",
+                columns: table => new
+                {
+                    MealId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(nullable: true),
+                    TotalMealKcal = table.Column<double>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Meals", x => x.MealId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Products",
+                columns: table => new
+                {
+                    ProductId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true),
+                    CarbsPer100g = table.Column<double>(nullable: false),
+                    FatPer100g = table.Column<double>(nullable: false),
+                    ProteinPer100g = table.Column<double>(nullable: false),
+                    KcalPer100g = table.Column<double>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Products", x => x.ProductId);
                 });
 
             migrationBuilder.CreateTable(
@@ -54,6 +99,8 @@ namespace TrainerPro.DAL.Migrations
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
+                    FirstName = table.Column<string>(nullable: true),
+                    LastName = table.Column<string>(nullable: true),
                     AccountTypeId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -85,6 +132,32 @@ namespace TrainerPro.DAL.Migrations
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MealProducts",
+                columns: table => new
+                {
+                    ProductId = table.Column<int>(nullable: false),
+                    MealId = table.Column<int>(nullable: false),
+                    Id = table.Column<int>(nullable: false),
+                    Quantity = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MealProducts", x => new { x.ProductId, x.MealId });
+                    table.ForeignKey(
+                        name: "FK_MealProducts_Meals_MealId",
+                        column: x => x.MealId,
+                        principalTable: "Meals",
+                        principalColumn: "MealId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MealProducts_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "ProductId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -173,6 +246,59 @@ namespace TrainerPro.DAL.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "TrainingPlans",
+                columns: table => new
+                {
+                    TrainingPlanId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserIdId = table.Column<Guid>(nullable: true),
+                    Date = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TrainingPlans", x => x.TrainingPlanId);
+                    table.ForeignKey(
+                        name: "FK_TrainingPlans_AspNetUsers_UserIdId",
+                        column: x => x.UserIdId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TrainingPlanExercises",
+                columns: table => new
+                {
+                    TrainingPlanId = table.Column<int>(nullable: false),
+                    ExerciseId = table.Column<int>(nullable: false),
+                    TrainingPlanExerciseId = table.Column<int>(nullable: false),
+                    RecommendedNumberOfSets = table.Column<int>(nullable: false),
+                    RecommendedNumberOfReps = table.Column<int>(nullable: false),
+                    RecommendedWeight = table.Column<int>(nullable: false),
+                    RecommendedTime = table.Column<TimeSpan>(nullable: false),
+                    NumberOfSets = table.Column<int>(nullable: false),
+                    NumberOfReps = table.Column<int>(nullable: false),
+                    Weight = table.Column<int>(nullable: false),
+                    TimeSpent = table.Column<TimeSpan>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TrainingPlanExercises", x => new { x.ExerciseId, x.TrainingPlanId });
+                    table.ForeignKey(
+                        name: "FK_TrainingPlanExercises_Exercises_ExerciseId",
+                        column: x => x.ExerciseId,
+                        principalTable: "Exercises",
+                        principalColumn: "ExerciseId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TrainingPlanExercises_TrainingPlans_TrainingPlanId",
+                        column: x => x.TrainingPlanId,
+                        principalTable: "TrainingPlans",
+                        principalColumn: "TrainingPlanId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "AccountTypes",
                 columns: new[] { "Id", "Description", "Name" },
@@ -226,6 +352,21 @@ namespace TrainerPro.DAL.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MealProducts_MealId",
+                table: "MealProducts",
+                column: "MealId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TrainingPlanExercises_TrainingPlanId",
+                table: "TrainingPlanExercises",
+                column: "TrainingPlanId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TrainingPlans_UserIdId",
+                table: "TrainingPlans",
+                column: "UserIdId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -246,7 +387,25 @@ namespace TrainerPro.DAL.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "MealProducts");
+
+            migrationBuilder.DropTable(
+                name: "TrainingPlanExercises");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Meals");
+
+            migrationBuilder.DropTable(
+                name: "Products");
+
+            migrationBuilder.DropTable(
+                name: "Exercises");
+
+            migrationBuilder.DropTable(
+                name: "TrainingPlans");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
