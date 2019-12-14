@@ -17,6 +17,7 @@ namespace TrainerPro.Api
     using TrainerPro.Api.Helpers.Models;
     using TrainerPro.Core.Identities;
     using TrainerPro.DAL;
+    using TrainerPro.Services;
     using TrainerPro.Services.Interfaces;
     using TrainerPro.Services.Services;
 
@@ -97,6 +98,7 @@ namespace TrainerPro.Api
             services.AddScoped<ITrainerService, TrainerService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IMealService, MealService>();
+            services.AddScoped<ITrainingService, TrainingService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
