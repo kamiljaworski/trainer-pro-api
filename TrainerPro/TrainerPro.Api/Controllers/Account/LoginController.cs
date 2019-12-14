@@ -72,7 +72,5 @@
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-
-
     }
 }

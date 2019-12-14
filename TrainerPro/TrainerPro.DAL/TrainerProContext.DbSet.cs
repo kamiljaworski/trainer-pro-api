@@ -13,8 +13,6 @@
         public DbSet<Product> Products { get; set; }
         public DbSet<Meal> Meals { get; set; }
         public DbSet<MealProduct> MealProducts { get; set; }
-        public DbSet<Exercise> Exercises { get; set; }
-        public DbSet<TrainingPlan> TrainingPlans { get; set; }
-        public DbSet<TrainingPlanExercise> TrainingPlanExercises { get; set; }
+        public DbSet<Training> Trainings { get; set; }
     }
 }

@@ -41,24 +41,9 @@
                 .HasForeignKey(mp => mp.MealId);
 
             modelBuilder.Entity<ApplicationUser>()
-                .HasMany(tp => tp.TrainingPlans)
-                .WithOne(u => u.UserId);
-
-            modelBuilder.Entity<TrainingPlanExercise>()
-                .HasKey(tpe => new { tpe.ExerciseId, tpe.TrainingPlanId });
-
-            modelBuilder.Entity<TrainingPlanExercise>()
-                .HasOne(tpe => tpe.Exercise)
-                .WithMany(e => e.TrainingPlanExercises)
-                .HasForeignKey(tpe => tpe.ExerciseId);
-
-            modelBuilder.Entity<TrainingPlanExercise>()
-                .HasOne(tpe => tpe.TrainingPlan)
-                .WithMany(tp => tp.TrainingPlanExercises)
-                .HasForeignKey(tpe => tpe.TrainingPlanId);
-
-            //modelBuilder.Entity<Exercise>()
-            //    .ToTable("Exercises");
+                .HasMany(tp => tp.Trainings)
+                .WithOne(u => u.User)
+                .HasForeignKey(tp => tp.UserId);
         }
     }
 }
