@@ -1,11 +1,13 @@
 ﻿namespace TrainerPro.Services.Services
 {
     using Microsoft.EntityFrameworkCore;
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using TrainerPro.Core.DTOs;
     using TrainerPro.Core.Entities;
+    using TrainerPro.Core.Enums;
     using TrainerPro.DAL;
     using TrainerPro.Services.Interfaces;
 
@@ -75,6 +77,67 @@
                 await _dbContext.Meals.AddAsync(meal);
                 await _dbContext.SaveChangesAsync();
             }
+        }
+
+        public async Task<IEnumerable<UserMealDTO>> GetUserMealsByUsernameAsync(string username)
+        {
+            var user = await _dbContext.Users.SingleAsync(x => x.NormalizedUserName == username.ToUpper());
+
+            var meals = await _dbContext.UserMeals
+                .Include(x => x.Meal)
+                .Where(x => x.UserId == user.Id)
+                .ToListAsync();
+
+            return meals.GroupBy(x => x.Day)
+                .Select(g => new UserMealDTO
+                {
+                    UserId = g.First().UserId.ToString(),
+                    Day = g.Key,
+                    BreakfastMealId = g.First(x => x.MealOfDay == MealOfDay.Breakfast.ToString()).MealId,
+                    BreakfastMealName = g.First(x => x.MealOfDay == MealOfDay.Breakfast.ToString()).Meal.Title,
+                    LunchMealId = g.First(x => x.MealOfDay == MealOfDay.Lunch.ToString()).MealId,
+                    LunchMealName = g.First(x => x.MealOfDay == MealOfDay.Lunch.ToString()).Meal.Title,
+                    DinnerMealId = g.First(x => x.MealOfDay == MealOfDay.Dinner.ToString()).MealId,
+                    DinnerMealName = g.First(x => x.MealOfDay == MealOfDay.Dinner.ToString()).Meal.Title
+                })
+                .ToList();
+        }
+
+        public async Task AddOrUpdateUserMealAsync(AddOrUpdateUserMealDTO model)
+        {
+            var user = await _dbContext.Users.SingleAsync(x => x.NormalizedUserName == model.Username.ToUpper());
+            var userMeals = await _dbContext.UserMeals.Where(x => x.UserId == user.Id && x.Day == model.Day).ToListAsync();
+
+            if (userMeals.Any())
+                _dbContext.RemoveRange(userMeals);
+
+            var newMeals = new List<UserMeal>
+            {
+                new UserMeal
+                {
+                    UserId = user.Id,
+                    Day = model.Day,
+                    MealOfDay = MealOfDay.Breakfast.ToString(),
+                    MealId = model.BreakfastMealId
+                },
+                new UserMeal
+                {
+                    UserId = user.Id,
+                    Day = model.Day,
+                    MealOfDay =MealOfDay.Lunch.ToString(),
+                    MealId = model.LunchMealId
+                },
+                new UserMeal
+                {
+                    UserId = user.Id,
+                    Day = model.Day,
+                    MealOfDay = MealOfDay.Dinner.ToString(),
+                    MealId = model.DinnerMealId
+                }
+            };
+
+            await _dbContext.UserMeals.AddRangeAsync(newMeals);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

@@ -12,5 +12,6 @@
         public int AccountTypeId { get; set; }
         public AccountType AccountType { get; set; }
         public ICollection<Training> Trainings { get; set; }
+        public ICollection<UserMeal> UserMeals { get; set; }
     }
 }

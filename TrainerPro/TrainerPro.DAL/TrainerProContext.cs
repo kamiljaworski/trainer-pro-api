@@ -44,6 +44,19 @@
                 .HasMany(tp => tp.Trainings)
                 .WithOne(u => u.User)
                 .HasForeignKey(tp => tp.UserId);
+
+            modelBuilder.Entity<UserMeal>()
+                .HasKey(x => new { x.UserId, x.MealId, x.Day, x.MealOfDay });
+
+            modelBuilder.Entity<UserMeal>()
+                .HasOne(um => um.User)
+                .WithMany(u => u.UserMeals)
+                .HasForeignKey(um => um.UserId);
+
+            modelBuilder.Entity<UserMeal>()
+                .HasOne(um => um.Meal)
+                .WithMany(m => m.UserMeals)
+                .HasForeignKey(um => um.MealId);
         }
     }
 }

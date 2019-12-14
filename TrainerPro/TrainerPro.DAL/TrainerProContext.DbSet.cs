@@ -14,5 +14,6 @@
         public DbSet<Meal> Meals { get; set; }
         public DbSet<MealProduct> MealProducts { get; set; }
         public DbSet<Training> Trainings { get; set; }
+        public DbSet<UserMeal> UserMeals { get; set; }
     }
 }
