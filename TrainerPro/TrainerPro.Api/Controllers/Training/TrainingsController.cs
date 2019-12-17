@@ -37,10 +37,9 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostAsync([FromBody] AddTrainingDTO model)
+        public async Task<IActionResult> PostAsync(AddTrainingDTO model)
         {
-            var username = User.Claims.Where(c => c.Type == "username").First().Value;
-            await _trainingService.AddTrainingAsync(username, model);
+            await _trainingService.AddTrainingAsync(model);
 
             return Ok();
         }

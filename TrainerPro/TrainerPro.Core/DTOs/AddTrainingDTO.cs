@@ -5,6 +5,9 @@
     public class AddTrainingDTO
     {
         [Required]
+        public string Username { get; set; }
+
+        [Required]
         public string Name { get; set; }
 
         [Required]

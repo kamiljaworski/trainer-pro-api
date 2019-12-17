@@ -35,9 +35,9 @@
                 .ToListAsync();
         }
 
-        public async Task AddTrainingAsync(string username, AddTrainingDTO model)
+        public async Task AddTrainingAsync(AddTrainingDTO model)
         {
-            var user = await _dbContext.Users.SingleAsync(x => x.NormalizedUserName == username.ToUpper());
+            var user = await _dbContext.Users.SingleAsync(x => x.NormalizedUserName == model.Username.ToUpper());
 
             var training = new Training
             {
