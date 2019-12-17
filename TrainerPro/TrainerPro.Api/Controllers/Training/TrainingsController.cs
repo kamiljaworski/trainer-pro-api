@@ -19,6 +19,14 @@
             _trainingService = trainingService;
         }
 
+        [HttpGet("{username}")]
+        public async Task<IActionResult> GetByUsernameAsync(string username)
+        {
+            var result = await _trainingService.GetTrainingsByUsernameAsync(username);
+
+            return Ok(result);
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetAsync()
         {

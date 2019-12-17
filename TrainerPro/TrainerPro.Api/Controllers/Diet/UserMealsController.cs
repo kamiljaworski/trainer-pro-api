@@ -19,6 +19,14 @@
             _mealService = mealService;
         }
 
+        [HttpGet("{username}")]
+        public async Task<IActionResult> GetByUsernameAsync(string username)
+        {
+            var result = await _mealService.GetUserMealsByUsernameAsync(username);
+
+            return Ok(result);
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetAsync()
         {
