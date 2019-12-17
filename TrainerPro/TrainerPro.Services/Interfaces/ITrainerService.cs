@@ -12,5 +12,6 @@ namespace TrainerPro.Services.Interfaces
         Task<TrainerDTO> GetTrainerByIdAsync(string id);
         Task<TrainerDTO> GetTrainerAssignedToClientAsync(string clientUsername);
         Task AssignClientToTrainerAsync(string clientUsername, string trainerId);
+        Task<IEnumerable<ClientDTO>> GetClientsAssignedToTrainer(string trainerUsername);
     }
 }

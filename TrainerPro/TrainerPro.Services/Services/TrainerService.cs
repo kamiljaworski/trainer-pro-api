@@ -80,6 +80,29 @@
             await _dbContext.SaveChangesAsync();
         }
 
+        public async Task<IEnumerable<ClientDTO>> GetClientsAssignedToTrainer(string trainerUsername)
+        {
+            var trainer = await _dbContext.Users.SingleAsync(x => x.NormalizedUserName == trainerUsername.ToUpper());
+
+            if (trainer.AccountTypeId != (int)AccountType.Trainer)
+                throw new InvalidOperationException("Client cannot have assigned clients");
+
+            return await _dbContext.Users
+                .Where(x => x.TrainerId == trainer.Id && x.AccountTypeId == (int)AccountType.Client)
+                .Select(x => new ClientDTO
+                {
+                    Id = x.Id.ToString(),
+                    Username = x.UserName,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    Email = x.Email,
+                    Height = x.Height,
+                    Sex = x.Sex,
+                    Weight = x.Weight
+                })
+                .ToListAsync();
+        }
+
         private TrainerDTO GetTrainerDTOFromUserEntity(ApplicationUser trainer)
         {
             return new TrainerDTO
