@@ -45,6 +45,17 @@
                 .WithOne(u => u.User)
                 .HasForeignKey(tp => tp.UserId);
 
+            modelBuilder.Entity<ApplicationUser>()
+                .HasOne(client => client.Trainer)
+                .WithMany(trainer => trainer.Clients)
+                .HasForeignKey(client => client.TrainerId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<ApplicationUser>()
+                .Property(a => a.Sex)
+                .HasMaxLength(1)
+                .HasDefaultValue(null);
+
             modelBuilder.Entity<UserMeal>()
                 .HasKey(x => new { x.UserId, x.MealId, x.Day, x.MealOfDay });
 

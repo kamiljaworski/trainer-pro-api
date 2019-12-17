@@ -7,6 +7,10 @@
   <ItemGroup>
     <Compile Remove="Migrations\20191020182405_Initial.cs" />
     <Compile Remove="Migrations\20191020182405_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20191217152430_AddSexWeightHeightAndTrainerClientRelation.cs" />
+    <Compile Remove="Migrations\20191217152430_AddSexWeightHeightAndTrainerClientRelation.Designer.cs" />
+    <Compile Remove="Migrations\20191217152621_AddSexWeightHeightAndTrainerClientRelation.cs" />
+    <Compile Remove="Migrations\20191217152621_AddSexWeightHeightAndTrainerClientRelation.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

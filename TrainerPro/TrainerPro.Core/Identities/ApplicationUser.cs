@@ -11,6 +11,14 @@
         public string LastName { get; set; }
         public int AccountTypeId { get; set; }
         public AccountType AccountType { get; set; }
+        public decimal? Weight { get; set; }
+        public int? Height { get; set; }
+        public string Sex { get; set; }
+
+        public Guid? TrainerId { get; set; }
+        public ApplicationUser Trainer { get; set; }
+        public ICollection<ApplicationUser> Clients { get; set; }
+
         public ICollection<Training> Trainings { get; set; }
         public ICollection<UserMeal> UserMeals { get; set; }
     }
