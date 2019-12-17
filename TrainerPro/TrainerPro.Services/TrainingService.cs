@@ -18,12 +18,14 @@
             _dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<TrainingDTO>> GetTrainingsByUsernameAsync(string username)
+        public async Task<IEnumerable<TrainingDTO>> GetTrainingsByUsernameAndDayAsync(string username, string day = null)
         {
             var user = await _dbContext.Users.SingleAsync(x => x.NormalizedUserName == username.ToUpper());
+            day = string.IsNullOrEmpty(day) ? day : day.ToUpper();
 
             return await _dbContext.Trainings
-                .Where(x => x.UserId == user.Id)
+                .Where(x => x.UserId == user.Id &&
+                           (!string.IsNullOrEmpty(day) ? x.Day.ToUpper() == day : true))
                 .Select(x => new TrainingDTO
                 {
                     Id = x.Id,

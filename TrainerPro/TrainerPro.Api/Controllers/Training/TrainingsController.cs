@@ -19,19 +19,27 @@
             _trainingService = trainingService;
         }
 
-        [HttpGet("{username}")]
-        public async Task<IActionResult> GetByUsernameAsync(string username)
-        {
-            var result = await _trainingService.GetTrainingsByUsernameAsync(username);
-
-            return Ok(result);
-        }
-
         [HttpGet]
         public async Task<IActionResult> GetAsync()
         {
             var username = User.Claims.Where(c => c.Type == "username").First().Value;
-            var result = await _trainingService.GetTrainingsByUsernameAsync(username);
+            var result = await _trainingService.GetTrainingsByUsernameAndDayAsync(username);
+
+            return Ok(result);
+        }
+
+        [HttpGet("{username}")]
+        public async Task<IActionResult> GetByUsernameAsync(string username)
+        {
+            var result = await _trainingService.GetTrainingsByUsernameAndDayAsync(username);
+
+            return Ok(result);
+        }
+
+        [HttpGet("{username}/{day}")]
+        public async Task<IActionResult> GetByUsernameAsync(string username, string day)
+        {
+            var result = await _trainingService.GetTrainingsByUsernameAndDayAsync(username, day);
 
             return Ok(result);
         }
