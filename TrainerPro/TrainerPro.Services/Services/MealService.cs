@@ -79,13 +79,14 @@
             }
         }
 
-        public async Task<IEnumerable<UserMealDTO>> GetUserMealsByUsernameAsync(string username)
+        public async Task<IEnumerable<UserMealDTO>> GetUserMealsByUsernameAndDayAsync(string username, string day = null)
         {
             var user = await _dbContext.Users.SingleAsync(x => x.NormalizedUserName == username.ToUpper());
+            day = string.IsNullOrEmpty(day) ? day : day.ToUpper();
 
             var meals = await _dbContext.UserMeals
                 .Include(x => x.Meal)
-                .Where(x => x.UserId == user.Id)
+                .Where(x => x.UserId == user.Id && (!string.IsNullOrEmpty(day) ? x.Day.ToUpper() == day : true))
                 .ToListAsync();
 
             return meals.GroupBy(x => x.Day)

@@ -37,7 +37,7 @@
         }
 
         [HttpGet("{username}/{day}")]
-        public async Task<IActionResult> GetByUsernameAsync(string username, string day)
+        public async Task<IActionResult> GetByUsernameAndDayAsync(string username, string day)
         {
             var result = await _trainingService.GetTrainingsByUsernameAndDayAsync(username, day);
 

@@ -19,19 +19,28 @@
             _mealService = mealService;
         }
 
-        [HttpGet("{username}")]
-        public async Task<IActionResult> GetByUsernameAsync(string username)
-        {
-            var result = await _mealService.GetUserMealsByUsernameAsync(username);
-
-            return Ok(result);
-        }
-
         [HttpGet]
         public async Task<IActionResult> GetAsync()
         {
             var username = User.Claims.Where(c => c.Type == "username").First().Value;
-            var result = await _mealService.GetUserMealsByUsernameAsync(username);
+            var result = await _mealService.GetUserMealsByUsernameAndDayAsync(username);
+
+            return Ok(result);
+        }
+
+        [HttpGet("{username}")]
+        public async Task<IActionResult> GetByUsernameAsync(string username)
+        {
+            var result = await _mealService.GetUserMealsByUsernameAndDayAsync(username);
+
+            return Ok(result);
+        }
+
+
+        [HttpGet("{username}/{day}")]
+        public async Task<IActionResult> GetByUsernameAndDayAsync(string username, string day)
+        {
+            var result = await _mealService.GetUserMealsByUsernameAndDayAsync(username, day);
 
             return Ok(result);
         }

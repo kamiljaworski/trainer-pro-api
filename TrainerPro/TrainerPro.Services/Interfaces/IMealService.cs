@@ -8,7 +8,7 @@
     {
         Task AddOrUpdateMealAsync(AddOrUpdateMealDTO model);
         Task<IEnumerable<MealDTO>> GetMealsAsync();
-        Task<IEnumerable<UserMealDTO>> GetUserMealsByUsernameAsync(string username);
+        Task<IEnumerable<UserMealDTO>> GetUserMealsByUsernameAndDayAsync(string username, string day = null);
         Task AddOrUpdateUserMealAsync(AddOrUpdateUserMealDTO model);
     }
 }
