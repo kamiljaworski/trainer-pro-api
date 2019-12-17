@@ -35,20 +35,33 @@
                 .ToListAsync();
         }
 
-        public async Task AddTrainingAsync(AddTrainingDTO model)
+        public async Task AddOrUpdateTrainingAsync(AddOrUpdateTrainingDTO model)
         {
             var user = await _dbContext.Users.SingleAsync(x => x.NormalizedUserName == model.Username.ToUpper());
 
-            var training = new Training
+            if (model.TrainingId != null && model.TrainingId > 0)
             {
-                Name = model.Name,
-                Repeats = model.Repeats,
-                Series = model.Series,
-                Day = model.Day,
-                UserId = user.Id
-            };
+                var training = await _dbContext.Trainings.SingleAsync(x => x.Id == model.TrainingId);
 
-            await _dbContext.Trainings.AddAsync(training);
+                training.Name = model.Name;
+                training.Repeats = model.Repeats;
+                training.Series = model.Series;
+                training.Day = model.Day;
+            } 
+            else
+            {
+                var training = new Training
+                {
+                    Name = model.Name,
+                    Repeats = model.Repeats,
+                    Series = model.Series,
+                    Day = model.Day,
+                    UserId = user.Id
+                };
+
+                await _dbContext.Trainings.AddAsync(training);
+            }
+
             await _dbContext.SaveChangesAsync();
         }
     }

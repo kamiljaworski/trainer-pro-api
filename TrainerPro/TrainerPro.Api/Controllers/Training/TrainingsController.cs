@@ -37,9 +37,9 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostAsync(AddTrainingDTO model)
+        public async Task<IActionResult> PostAsync(AddOrUpdateTrainingDTO model)
         {
-            await _trainingService.AddTrainingAsync(model);
+            await _trainingService.AddOrUpdateTrainingAsync(model);
 
             return Ok();
         }

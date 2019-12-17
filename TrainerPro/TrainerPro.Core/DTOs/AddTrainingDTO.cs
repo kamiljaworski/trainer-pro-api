@@ -2,8 +2,10 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    public class AddTrainingDTO
+    public class AddOrUpdateTrainingDTO
     {
+        public int? TrainingId { get; set; }
+
         [Required]
         public string Username { get; set; }
 

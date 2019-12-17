@@ -7,6 +7,6 @@
     public interface ITrainingService
     {
         Task<IEnumerable<TrainingDTO>> GetTrainingsByUsernameAsync(string username);
-        Task AddTrainingAsync(AddTrainingDTO model);
+        Task AddOrUpdateTrainingAsync(AddOrUpdateTrainingDTO model);
     }
 }
